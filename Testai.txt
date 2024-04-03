@@ -1,0 +1,20 @@
+window.py
+
+print(Cell.all) #patikrinam ar visi buttonai yra liste
+
+for c in Cell.all:   #tikrinam ar false pasikeite i true random celluose
+    print(c.is_mine)
+
+In order to test the success message, I added a static method to the class to show all the mines:
+
+   @staticmethod
+    def show_all_mines():
+        for cell in Cell.all:
+            if cell.is_mine:
+                cell.cell_btn_object.configure(bg='yellow')
+
+In the main program, after randomize the mine placement:
+
+Cell.show_all_mines()
+
+Just for testing of course.
