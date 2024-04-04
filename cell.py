@@ -2,7 +2,6 @@ from tkinter import Button, Label
 import utilities
 import settings
 import random
-import settings
 import ctypes
 import sys
 
@@ -108,10 +107,10 @@ class Cell:
         #Pazymiu kad langelis yra atidarytas
         self.is_opened = True
 
-    def show_mine(self): # zaidimo logika, pralaimejimas
-        self.cell_btn_object.configure(bg = 'red')
+    def show_mine(self):
+        self.cell_btn_object.configure(bg='red')
         ctypes.windll.user32.MessageBoxW(0, 'You clicked on a mine', 'Game Over', 0)
-        sys.exit()
+        self.reset_game()
 
     def right_click(self, event):
         if not self.is_opened:
@@ -134,6 +133,25 @@ class Cell:
         ) #sample yra metodas kuris paziuri pirma i lista ir td kiek bombu mum reik
         for picked_cell in picked_cells:
             picked_cell.is_mine = True
+
+    @staticmethod
+    def show_all_mines():
+        for cell in Cell.all:
+            if cell.is_mine:
+                cell.cell_btn_object.configure(bg='yellow')
+
+    @staticmethod
+    def reset_game():
+        for cell in Cell.all:
+            cell.is_opened = False
+            cell.is_mine = False
+            cell.is_mine_candidate = False
+            cell.cell_btn_object.configure(bg='SystemButtonFace')
+            cell.cell_btn_object.configure(text='')
+        Cell.cell_count = settings.CELL_COUNT
+        if Cell.cell_count_label_object:
+            Cell.cell_count_label_object.configure(text=f"Cells Left:{Cell.cell_count}")
+        Cell.random_mines()
 
     def __repr__(self):
         return f"Cell({self.x}, {self.y})"
