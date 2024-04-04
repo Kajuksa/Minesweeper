@@ -110,7 +110,7 @@ class Cell:
 
     def show_mine(self): # zaidimo logika, pralaimejimas
         self.cell_btn_object.configure(bg = 'red')
-        ctypes.windll.user32.MessageBoxW(0, 'You clicked on a mine', 'Game Over', 2)
+        ctypes.windll.user32.MessageBoxW(0, 'You clicked on a mine', 'Game Over', 0)
         sys.exit()
 
     def right_click(self, event):
