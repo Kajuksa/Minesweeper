@@ -1,0 +1,26 @@
+import unittest
+import tkinter as tk
+from unittest.mock import MagicMock
+from cell import Cell
+
+class TestCell(unittest.TestCase):
+    def setUp(self):
+        # Create a cell object with mocked button object
+        self.cell_obj = Cell(0, 0)
+        self.cell_obj.cell_btn_object = MagicMock()
+
+    def test_right_click_toggle_mine_candidate(self):
+        # Test when is_mine_candidate is False
+        self.cell_obj.is_mine_candidate = False
+        self.cell_obj.right_click(None)
+        self.cell_obj.cell_btn_object.configure.assert_called_once_with(bg='grey')
+        self.assertTrue(self.cell_obj.is_mine_candidate)
+
+        # Test when is_mine_candidate is True
+        self.cell_obj.is_mine_candidate = True
+        self.cell_obj.right_click(None)
+        self.cell_obj.cell_btn_object.configure.assert_called_with(bg='SystemButtonFace')
+        self.assertFalse(self.cell_obj.is_mine_candidate)
+
+if __name__ == '__main__':
+    unittest.main()
