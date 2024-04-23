@@ -18,19 +18,19 @@ top_frame = Frame(
    width=utilities.width_size(100),
    height=utilities.height_size(20)
     )
-top_frame.place(x=0, y=0)
+top_frame.place(x = 0, y = 0)
 
 game_title = Label(
     top_frame,
     bg = 'black',
     fg = 'white',
     text = 'Minesweeper',
-    font = ('', 48)
+    font = ('', 50)
 )
 
 game_title.place(
-    x = utilities.width_size(25),
-    y = 0
+    x = utilities.width_size(35),
+    y = 10
 )
 
 left_frame = Frame(
@@ -40,19 +40,19 @@ left_frame = Frame(
    height=utilities.height_size(100)
     )
 left_frame.place(
-    x=0,
+    x=20,
     y=utilities.height_size(20)
     )
 
 center_frame = Frame(
    window,
    bg='black',
-   width=utilities.width_size(80),
-   height=utilities.height_size(80)
+   width=utilities.width_size(100),
+   height=utilities.height_size(100)
     )
 center_frame.place(
-    x=utilities.width_size(30),
-    y=utilities.height_size(30)
+    x=utilities.width_size(25),
+    y=utilities.height_size(15)
     )
 
 for x in range(settings.GRID_SIZE):
@@ -66,6 +66,7 @@ for x in range(settings.GRID_SIZE):
 Cell.random_mines()
 Cell.create_cell_count_label(left_frame)
 Cell.cell_count_label_object.place(x=0, y=0)
+#Cell.show_all_mines()
 
 
 # Run the window
