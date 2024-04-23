@@ -1,16 +1,19 @@
 from tkinter import Button, Label
-import utilities
+import tkinter as tk
 import settings
 import random
 import ctypes
-import sys
-
 
 
 class Cell:
     all = []
     cell_count = settings.CELL_COUNT
     cell_count_label_object = None
+
+    with open("game_info.txt", "r") as file:
+        data = file.readlines()
+        wins, loses = map(int, (data[0].split(":")[1].strip(), data[1].split(":")[1].strip()))
+
     def __init__(self, x, y, is_mine = False):
         self.is_mine = is_mine
         self.is_opened = False
@@ -22,7 +25,7 @@ class Cell:
         #Prideti objiekta i lista
         Cell.all.append(self)
 
-    def create_btn_object(self, location):
+    def create_btn_object(self, location): 
         btn = Button (
             location,
             width = 12,
@@ -44,8 +47,11 @@ class Cell:
         Cell.cell_count_label_object = label
 
     def left_click(self, event):
+
         if self.is_mine:
             self.show_mine()
+            Cell.loses += 1
+            Cell.write_game_info()
         else:
             if self.surrounding_cells_mines_lenght == 0:
                 for cell_obj in self.surrounding:
@@ -54,10 +60,11 @@ class Cell:
         #Laimejimas
         if Cell.cell_count == settings.MINES:
             ctypes.windll.user32.MessageBoxW(0, 'Congratulations! You won the game!', 'Win, win, win!', 0)
-            sys.exit()
+            Cell.wins += 1
+            Cell.write_game_info()
+            self.reset_game()
         #cancel left click if cell is opened
         self.cell_btn_object.unbind('<button-1')
-
 
     def get_cell_by_axis(self, x, y):
         # return a cell object based on the value of x and y
@@ -68,7 +75,6 @@ class Cell:
 
     @property #The @property is a built-in decorator for the property() function in Python. It is used to give "special" functionality to certain methods to make them act as getters, setters, or deleters when we define properties in a class
     def surrounding(self):
-                #print(self.get_cell_by_axis(0,0)) #testuoju ar veikia
         cells = [
             self.get_cell_by_axis(self.x-1, self.y-1),
             self.get_cell_by_axis(self.x-1, self.y),
@@ -79,8 +85,7 @@ class Cell:
             self.get_cell_by_axis(self.x+1, self.y),
             self.get_cell_by_axis(self.x+1, self.y+1)
         ]
-        #print(cells) #tikrinu ar liste yra visi aplink paspausta cella langeliai
-        cells = [cell for cell in cells if cell is not None] #comprehension
+        cells = [cell for cell in cells if cell is not None]
         return cells
     
     @property
@@ -106,6 +111,7 @@ class Cell:
             self.cell_btn_object.configure(bg = 'SystemButtonFace')
         #Pazymiu kad langelis yra atidarytas
         self.is_opened = True
+        
 
     def show_mine(self):
         self.cell_btn_object.configure(bg='red')
@@ -115,15 +121,10 @@ class Cell:
     def right_click(self, event):
         if not self.is_opened:
             if not self.is_mine_candidate:
-                self.cell_btn_object.configure(
-                    bg='grey'
-                )
-                self.is_mine_candidate = True
+                self.cell_btn_object.configure(bg='grey')
             else:
-                self.cell_btn_object.configure(
-                    bg = 'SystemButtonFace'
-                )
-                self.is_mine_candidate = False
+                self.cell_btn_object.configure(bg='SystemButtonFace')
+            self.is_mine_candidate = not self.is_mine_candidate
 
     @staticmethod
     def random_mines():
@@ -152,6 +153,15 @@ class Cell:
         if Cell.cell_count_label_object:
             Cell.cell_count_label_object.configure(text=f"Cells Left:{Cell.cell_count}")
         Cell.random_mines()
+        Cell.write_game_info()
 
     def __repr__(self):
         return f"Cell({self.x}, {self.y})"
+
+    @staticmethod
+    def write_game_info():
+        filename = "game_info.txt"
+        with open(filename, "w") as file:  # Open in write mode to overwrite
+            record = f"Wins: {Cell.wins}\nLoses: {Cell.loses}"  # Update record
+            file.write(record)
+
