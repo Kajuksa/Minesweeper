@@ -9,11 +9,9 @@ class Cell:
     cell_count = settings.CELL_COUNT
     cell_count_label_object = None
 
-    @classmethod
-    def initialize(cls):
-        with open("game_info.txt", "r") as file:
-            data = file.readlines()
-            cls.wins, cls.loses = map(int, (data[0].split(":")[1].strip(), data[1].split(":")[1].strip()))
+    with open("game_info.txt", "r") as file:
+        data = file.readlines()
+        wins, loses = [int(x.split(":")[1].strip()) for x in data[:2]]
 
     def __init__(self, x, y, is_mine=False):
         self.is_mine = is_mine
@@ -143,12 +141,10 @@ class Cell:
     @staticmethod
     def write_game_info():
         filename = "game_info.txt"
-        with open(filename, "w") as file: 
-            record = f"Wins: {Cell.wins}\nLoses: {Cell.loses}" 
-            file.write(record)
+        with open(filename, "w") as file:  # Open in write mode to overwrite
+            record = f"Wins: {Cell.wins}\nLoses: {Cell.loses}"  # Update record
             file.write(record)
 
-Cell.initialize()
 
 #Polimorfizmas:
 #Method Overriding: Both show_cell() and show_mine() methods are defined in the Cell class. These methods override the behavior of the same-named methods defined in the superclass (in this case, there's no explicit superclass, but conceptually it's the same). When an instance of Cell is created, depending on whether it's a mine or not, calling show_cell() or show_mine() will execute the specific behavior defined in the subclass.
