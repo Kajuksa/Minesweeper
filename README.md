@@ -49,29 +49,6 @@ python window.py
 
 ---
 
-## 📁 Project Structure
-
-```
-├── window.py      # Main file — run this to start the game
-├── cell.py        # Cell class — handles cell logic and interactions
-├── results.txt    # Game outcome history (auto-generated)
-└── README.md
-```
-
----
-
-## 📸 Gameplay
-
-```
-[ ][ ][ ][ ][ ][ ][ ][ ]
-[ ][1][ ][ ][ ][ ][ ][ ]
-[ ][ ][💣][ ][ ][ ][ ][ ]
-[ ][ ][ ][ ][ ][ ][ ][ ]
-...
-```
-
----
-
 ## 👤 Author
 
 **Kajus Misevičius**  
